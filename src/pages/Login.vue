@@ -17,20 +17,30 @@
                 class="q-pa-lg nave-logo"
               />
               <br />
-              <label for="">Nome</label>
+              <label for="">E-mail</label>
               <q-input
-                placeholder="Nome"
+                placeholder="E-mail"
                 outlined
                 square
                 dense
                 class="q-pb-md"
+                v-model="email"
               />
               <label for="">Senha</label>
-              <q-input placeholder="Senha" outlined square dense />
+              <q-input
+                placeholder="Senha"
+                outlined
+                square
+                dense
+                v-model="password"
+                type="password"
+              />
               <q-btn
                 color="primary"
                 class="full-width no-border-radius q-my-lg	"
                 label="Entrar"
+                @click="logar()"
+                :loading="logando"
               />
             </q-card-section>
           </q-card>
@@ -46,7 +56,35 @@
   transform: translateX(-50%);
 </style>
 <script>
+import LoginHelper from "../helpers/login";
 export default {
-  name: "PageIndex"
+  name: "Login",
+  data() {
+    return {
+      email: "",
+      password: "",
+      logando: false
+    };
+  },
+  methods: {
+    logar() {
+      this.logando = true;
+      let logHelper = new LoginHelper();
+      logHelper
+        .login(this.email, this.password)
+        .then(() => {
+          this.$router.push("/");
+        })
+        .catch(err => {
+          this.$q.notify({
+            message: "Ocorreu um erro ao fazer login",
+            caption: err.statusText
+          });
+        })
+        .finally(() => {
+          this.logando = false;
+        });
+    }
+  }
 };
 </script>
