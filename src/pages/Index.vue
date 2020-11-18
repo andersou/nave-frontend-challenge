@@ -14,12 +14,12 @@
     </div>
 
     <q-scroll-area horizontal style="height: calc(100vh - 140px); width: 100%;">
-      <div class="row no-wrap">
+      <div class="row no-wrap q-gutter-md">
         <div
-          v-for="n in 10"
+          v-for="n in 4"
           :key="n"
-          style="width: 25vw"
-          class="q-pr-lg q-pt-md"
+          style="width: calc((100vw - 80px) / 4)" 
+          class="q-pt-md "
         >
           <q-img
             src="https://s3-us-east-2.amazonaws.com/maryville/wp-content/uploads/2019/06/25163706/Applications-Software-Developers-1-500x333.jpg"
@@ -39,14 +39,7 @@
             color="primary"
             icon="delete"
           />
-          <q-btn
-            @click="dialogDeleteSuccess = true"
-            padding="5px"
-            flat
-            round
-            color="primary"
-            icon="edit"
-          />
+          <q-btn padding="5px" flat round color="primary" icon="edit" />
         </div>
       </div>
     </q-scroll-area>
@@ -78,18 +71,34 @@
         </q-card-section>
       </q-card>
     </q-dialog>
-    <q-dialog v-model="dialogConfirm" persistent>
-      <q-card style="width: 700px; max-width: 80vw;">
-        <q-card-section class="row items-center">
-          <q-avatar icon="signal_wifi_off" color="primary" text-color="white" />
-          <span class="q-ml-sm"
-            >You are currently not connected to any network.</span
-          >
+    <q-dialog square v-model="dialogConfirm" persistent>
+      <q-card style="width: 470px; max-width: 80vw;">
+        <q-card-section class="row items-center q-pb-none">
+          <div class="text-h6">Excluir Naver</div>
+        </q-card-section>
+        <q-card-section class="">
+          <span class="">Tem certeza que deseja excluir esse Naver?</span>
         </q-card-section>
 
-        <q-card-actions align="right">
-          <q-btn flat label="Cancelar" color="primary" v-close-popup />
-          <q-btn flat label="Deletar" color="primary" v-close-popup />
+        <q-card-actions align="right" class="q-pr-md q-pb-md">
+          <q-btn
+            outline
+            class="no-border-radius q-mr-sm"
+            label="Cancelar"
+            color="primary"
+            v-close-popup
+            padding="xs xl"
+          />
+          <q-btn
+            class="no-border-radius"
+            label="Excluir"
+            color="primary"
+            @click="
+              dialogConfirm = false;
+              dialogDeleteSuccess = true;
+            "
+            padding="xs xl"
+          />
         </q-card-actions>
       </q-card>
     </q-dialog>
