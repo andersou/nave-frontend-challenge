@@ -5,7 +5,9 @@ const routes = [
     component: () => import("layouts/MainLayout.vue"),
     children: [
       { path: "", component: () => import("pages/Index.vue") },
-      { path: "create", component: () => import("pages/NaverForm.vue") }
+      { path: "form/:id", component: () => import("pages/NaverForm.vue") },
+
+      { path: "form", component: () => import("pages/NaverForm.vue") }
     ],
     beforeEnter: (to, from, next) => {
       let logHelper = new LoginHelper();

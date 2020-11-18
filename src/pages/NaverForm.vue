@@ -16,21 +16,45 @@
       <div class="row q-gutter-md q-my-xs">
         <div class="col">
           <label class="text-bold" for="">Nome</label>
-          <q-input placeholder="Nome" outlined square dense />
+          <q-input
+            v-model="naver.name"
+            placeholder="Nome"
+            outlined
+            square
+            dense
+          />
         </div>
         <div class="col">
           <label class="text-bold" for="">Cargo</label>
-          <q-input placeholder="Cargo" outlined square dense />
+          <q-input
+            v-model="naver.job_role"
+            placeholder="Cargo"
+            outlined
+            square
+            dense
+          />
         </div>
       </div>
       <div class="row q-gutter-md q-my-xs">
         <div class="col">
           <label class="text-bold" for="">Idade</label>
-          <q-input placeholder="Idade" outlined square dense />
+          <q-input
+            v-model="naver.birthdate"
+            placeholder="Idade"
+            outlined
+            square
+            dense
+          />
         </div>
         <div class="col">
           <label class="text-bold" for="">Tempo de empresa</label>
-          <q-input placeholder="Tempo de empresa" outlined square dense />
+          <q-input
+            v-model="naver.admission_date"
+            placeholder="Tempo de empresa"
+            outlined
+            square
+            dense
+          />
         </div>
       </div>
       <div class="row q-gutter-md q-my-xs">
@@ -41,11 +65,18 @@
             outlined
             square
             dense
+            v-model="naver.project"
           />
         </div>
         <div class="col">
           <label class="text-bold" for="">URL da foto do Naver</label>
-          <q-input placeholder="URL da foto do Nave" outlined square dense />
+          <q-input
+            placeholder="URL da foto do Nave"
+            outlined
+            square
+            dense
+            v-model="naver.url"
+          />
         </div>
       </div>
       <div class="row justify-end">
@@ -55,7 +86,8 @@
           class="no-border-radius q-my-sm"
           dense
           label="Salvar"
-          @click="dialogSaveSuccess = true"
+          @click="saveOrUpdate"
+          :loading="saving"
           no-caps
         />
       </div>
@@ -64,14 +96,14 @@
       <q-card style="width: 600px; max-width: 80vw;">
         <q-card-section class="row items-center q-pb-none">
           <div class="text-h6">
-            Naver {{ updating ? "atualizado" : "criado" }}
+            Naver {{ updatingMode ? "atualizado" : "criado" }}
           </div>
           <q-space />
           <q-btn icon="close" flat round dense v-close-popup />
         </q-card-section>
 
         <q-card-section class="q-pb-lg">
-          Naver {{ updating ? "atualizado" : "criado" }} com sucesso!
+          Naver {{ updatingMode ? "atualizado" : "criado" }} com sucesso!
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -79,13 +111,44 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   name: "NaverForm",
   data() {
     return {
       dialogSaveSuccess: false,
-      updating: false
+      updatingMode: false,
+      saving: false,
+      naver: {
+        job_role: "Desenvolvedor",
+        admission_date: "19/08/2018",
+        birthdate: "12/04/1992",
+        project: "Project Backend Test",
+        name: "John Doe",
+        url: "https://hackernoon.com/hn-images/1*Y0UYuGcFGSCfs5Eexafq6A.png"
+      }
     };
+  },
+  methods: {
+    saveOrUpdate() {
+      this.saving = true;
+      if (this.naver.id) {
+        //edit
+        this.saving = true;
+      } else {
+        this.criarNaver(this.naver)
+          .then(() => {
+            this.dialogSaveSuccess = true;
+          })
+          .finally(() => {
+            this.saving = false;
+          });
+      }
+    },
+    ...mapActions({
+      criarNaver: "navers/criarNaver",
+      atualizarNaver: "navers/atualizarNaver"
+    })
   }
 };
 </script>
