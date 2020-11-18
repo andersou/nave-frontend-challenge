@@ -10,33 +10,40 @@
         dense
         label="Adicionar Naver"
         no-caps
-        to="/create"
+        to="/form"
       />
     </div>
 
     <q-scroll-area horizontal style="height: calc(100vh - 140px); width: 100%;">
       <div class="row no-wrap q-gutter-md">
-        <div v-for="n in 4" :key="n" class="q-pt-md naver-card">
+        <div v-for="naver in navers" :key="naver.id" class="q-pt-md naver-card">
           <q-img
-            src="https://s3-us-east-2.amazonaws.com/maryville/wp-content/uploads/2019/06/25163706/Applications-Software-Developers-1-500x333.jpg"
+            :src="naver.url"
             spinner-color="black"
             style="filter: grayscale(1);"
             :ratio="1"
-            @click="dialogNaverView = true"
+            @click="showNaver(naver)"
           />
           <br />
-          <p class="q-mt-sm q-mb-none text-weight-bold">John Doe</p>
-          <p class="q-mb-none">Software Developer</p>
+          <p class="q-mt-sm q-mb-none text-weight-bold">{{ naver.name }}</p>
+          <p class="q-mb-none">{{ naver.job_role }}</p>
 
           <q-btn
-            @click="dialogConfirm = true"
+            @click="deleteNaver(naver)"
             padding="5px"
             flat
             round
             color="primary"
             icon="delete"
           />
-          <q-btn padding="5px" flat round color="primary" icon="edit" />
+          <q-btn
+            padding="5px"
+            flat
+            round
+            color="primary"
+            icon="edit"
+            @click="editNaver(naver)"
+          />
         </div>
       </div>
     </q-scroll-area>
@@ -44,10 +51,7 @@
       :show="dialogNaverView"
       :naver="naverSelecionado"
       @close="dialogNaverView = false"
-      @delete="
-        dialogNaverView = false;
-        dialogDeleteSuccess = true;
-      "
+      @delete="deleteNaver(naverSelecionado)"
     />
     <q-dialog v-model="dialogDeleteSuccess" square>
       <q-card style="width: 600px; max-width: 80vw;">
@@ -84,10 +88,7 @@
             class="no-border-radius"
             label="Excluir"
             color="primary"
-            @click="
-              dialogConfirm = false;
-              dialogDeleteSuccess = true;
-            "
+            @click="confirmDelete"
             padding="xs xl"
           />
         </q-card-actions>
@@ -100,6 +101,7 @@
   width: calc((100vw - 80px) / 4)
 </style>
 <script>
+import { mapActions, mapState } from "vuex";
 import dialogNaverView from "../components/DialogNaverView";
 export default {
   name: "PageIndex",
@@ -108,9 +110,41 @@ export default {
       dialogConfirm: false,
       dialogDeleteSuccess: false,
       dialogNaverView: false,
-      naverSelecionado: ""
+      naverSelecionado: {}
     };
   },
+  mounted() {
+    this.listarNavers();
+  },
+  methods: {
+    ...mapActions({
+      listarNavers: "navers/listarNavers",
+      deletarNaver: "navers/deletarNaver"
+    }),
+    showNaver(naver) {
+      this.naverSelecionado = naver;
+      this.dialogNaverView = true;
+    },
+    deleteNaver(naver) {
+      this.naverSelecionado = naver;
+
+      this.dialogConfirm = true;
+    },
+    confirmDelete() {
+      this.dialogNaverView = false;
+      this.deletarNaver(this.naverSelecionado.id)
+        .then(() => {
+          this.dialogDeleteSuccess = true;
+        })
+        .finally(() => {
+          this.dialogConfirm = false;
+        });
+    },
+    editNaver(naver) {
+      this.$router.push({ path: `/form/${naver.id}` });
+    }
+  },
+  computed: { ...mapState({ navers: state => state.navers.navers }) },
   components: {
     dialogNaverView
   }
