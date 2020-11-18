@@ -35,7 +35,7 @@ export function criarNaver(context, naver) {
   return api.create(naver).then(resp => {
     api
       .listAll()
-      .then(r => (response = r.json()))
+      .then(r => r.json())
       .then(json => {
         context.commit("updateNavers", json);
       });

@@ -97,8 +97,12 @@
   </q-page>
 </template>
 <style lang="stylus">
+
 .naver-card
-  width: calc((100vw - 80px) / 4)
+  @media (min-width: $breakpoint-xs-min)
+    width:  calc((100vw - 80px))
+  @media (min-width: $breakpoint-sm-min)
+    width: calc((100vw - 80px) / 4)
 </style>
 <script>
 import { mapActions, mapState } from "vuex";

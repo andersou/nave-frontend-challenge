@@ -1,7 +1,7 @@
 <template>
   <q-dialog square v-model="show">
     <q-card style="width: 800px; max-width: 80vw;">
-      <q-card-section horizontal>
+      <q-card-section :horizontal="$q.screen.gt.xs">
         <q-img
           :src="naver.url"
           spinner-color="black"
@@ -44,7 +44,14 @@
               color="primary"
               icon="delete"
             />
-            <q-btn padding="5px" flat round color="primary" icon="edit" />
+            <q-btn
+              padding="5px"
+              flat
+              round
+              color="primary"
+              icon="edit"
+              @click="editNaver"
+            />
           </div>
         </q-card-section>
         <div class="float-right q-pa-sm">
@@ -57,7 +64,12 @@
 
 <script>
 export default {
-  props: ["show", "naver"]
+  props: ["show", "naver"],
+  methods: {
+    editNaver() {
+      this.$router.push({ path: `/form/${this.naver.id}` });
+    }
+  }
 };
 </script>
 
