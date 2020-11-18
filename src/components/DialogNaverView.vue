@@ -1,6 +1,9 @@
 <template>
   <q-dialog square v-model="show">
-    <q-card style="width: 800px; max-width: 80vw;">
+    <q-card style="width: 800px; max-width: 80vw;" class="relative">
+      <div class="float-right q-pa-sm">
+        <q-btn icon="close" flat round dense @click="$emit('close')" />
+      </div>
       <q-card-section :horizontal="$q.screen.gt.xs">
         <q-img
           :src="naver.url"
@@ -19,13 +22,13 @@
                 Idade
               </p>
               <p class="text-body2">
-                {{ naver.birthdate }}
+                {{ idade }}
               </p>
               <p class="text-subtitle2 q-mb-sm">
                 Tempo de empresa
               </p>
               <p class="text-body2">
-                {{ naver.admission_date }}
+                {{ tempoDeEmpresa }}
               </p>
               <p class="text-subtitle2 q-mb-sm">
                 Projetos que participou
@@ -54,20 +57,33 @@
             />
           </div>
         </q-card-section>
-        <div class="float-right q-pa-sm">
-          <q-btn icon="close" flat round dense @click="$emit('close')" />
-        </div>
       </q-card-section>
     </q-card>
   </q-dialog>
 </template>
 
 <script>
+import moment from "moment";
 export default {
   props: ["show", "naver"],
   methods: {
     editNaver() {
       this.$router.push({ path: `/form/${this.naver.id}` });
+    }
+  },
+  computed: {
+    idade() {
+      return moment
+        .duration(moment().diff(this.naver.birthdate))
+        .locale("pt")
+        .humanize();
+    },
+    tempoDeEmpresa() {
+      //window.mom = moment.duration(moment().diff(this.naver.admission_date));
+      return moment
+        .duration(moment().diff(this.naver.admission_date))
+        .locale("pt")
+        .humanize();
     }
   }
 };
