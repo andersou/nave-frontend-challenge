@@ -1,7 +1,7 @@
 import API from "../../helpers/api";
 let api = new API();
 export function listarNavers(context) {
-  api
+  return api
     .listAll()
     .then(r => r.json())
     .then(json => {
@@ -9,32 +9,36 @@ export function listarNavers(context) {
     });
 }
 export function deletarNaver(context, id) {
-  api.delete(id).then(() => {
-    return api
+  api.delete(id).then(resp => {
+    api
       .listAll()
       .then(r => r.json())
       .then(json => {
         context.commit("updateNavers", json);
       });
+    return resp;
   });
 }
 export function atualizarNaver(context, naver) {
-  api.update(naver).then(() => {
-    return api
+  return api.update(naver).then(resp => {
+    api
       .listAll()
       .then(r => r.json())
       .then(json => {
         context.commit("updateNavers", json);
       });
+    console.log("aaa", resp);
+    return resp;
   });
 }
 export function criarNaver(context, naver) {
-  api.create(naver).then(() => {
-    return api
+  return api.create(naver).then(resp => {
+    api
       .listAll()
-      .then(r => r.json())
+      .then(r => (response = r.json()))
       .then(json => {
         context.commit("updateNavers", json);
       });
+    return resp;
   });
 }

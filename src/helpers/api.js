@@ -14,14 +14,12 @@ export default class API {
 
   fetchAuth(route, args) {
     let loginHelp = new LoginHelper();
-    console.log(args);
     args = Object.assign({}, args, {
       headers: {
         Authorization: `Bearer ${loginHelp.getToken()}`,
         "Content-Type": "application/json"
       }
     });
-    console.log(args);
     return fetch(route, args).catch(err => {
       if (err.status == 401) loginHelp.logout();
       return err;
@@ -47,7 +45,10 @@ export default class API {
     });
   }
   update(naver) {
-    return this.fetchAuth(API_URL + this.NAVERS_UPDATE + naver.id, {
+    let id = naver.id;
+    naver.id = undefined;
+    naver.user_id = undefined;
+    return this.fetchAuth(API_URL + this.NAVERS_UPDATE + id, {
       method: "PUT",
       body: JSON.stringify(naver)
     });
