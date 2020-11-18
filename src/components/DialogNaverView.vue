@@ -3,8 +3,8 @@
     <q-card style="width: 800px; max-width: 80vw;">
       <q-card-section horizontal>
         <q-img
-          src="https://s3-us-east-2.amazonaws.com/maryville/wp-content/uploads/2019/06/25163706/Applications-Software-Developers-1-500x333.jpg"
-          spinner-color="white"
+          :src="naver.url"
+          spinner-color="black"
           style="filter: grayscale(1);"
           :ratio="1"
           class="col-6"
@@ -13,25 +13,25 @@
         <q-card-section class="full-width ">
           <div class="row full-width">
             <div class="col">
-              <p class="text-h6 q-mb-sm">John Doe</p>
-              <p>Software Developer</p>
+              <p class="text-h6 q-mb-sm">{{ naver.name }}</p>
+              <p>{{ naver.job_role }}</p>
               <p class="text-subtitle2 q-mb-sm">
                 Idade
               </p>
               <p class="text-body2">
-                24 anos
+                {{ naver.birthdate }}
               </p>
               <p class="text-subtitle2 q-mb-sm">
                 Tempo de empresa
               </p>
               <p class="text-body2">
-                24 anos
+                {{ naver.admission_date }}
               </p>
               <p class="text-subtitle2 q-mb-sm">
                 Projetos que participou
               </p>
               <p class="text-body2">
-                24 anos
+                {{ naver.project }}
               </p>
             </div>
           </div>
