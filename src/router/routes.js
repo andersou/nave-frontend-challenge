@@ -1,3 +1,4 @@
+import LoginHelper from "../helpers/login";
 const routes = [
   {
     path: "/",
@@ -5,7 +6,14 @@ const routes = [
     children: [
       { path: "", component: () => import("pages/Index.vue") },
       { path: "create", component: () => import("pages/NaverForm.vue") }
-    ]
+    ],
+    beforeEnter: (to, from, next) => {
+      let logHelper = new LoginHelper();
+
+      console.log(logHelper.isLoggedIn());
+      if (logHelper.isLoggedIn()) next();
+      else next("/login");
+    }
   },
   {
     path: "/login",
