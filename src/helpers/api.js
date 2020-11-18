@@ -1,6 +1,6 @@
 const API_URL = "http://navedex-api.herokuapp.com/v1";
 import LoginHelper from "./login";
-let loginHelp = new LoginHelper();
+//
 export default class API {
   USERS_LOGIN = "/users/login";
   USERS_SIGNUP = "/users/signup";
@@ -13,11 +13,15 @@ export default class API {
   NAVERS_DELETE = "/navers/"; //+id DEL
 
   fetchAuth(route, args) {
-    args = Object.join({}, args, {
+    let loginHelp = new LoginHelper();
+    console.log(args);
+    args = Object.assign({}, args, {
       headers: {
-        Authorization: `Bearer ${loginHelp.getToken()}`
+        Authorization: `Bearer ${loginHelp.getToken()}`,
+        "Content-Type": "application/json"
       }
     });
+    console.log(args);
     return fetch(route, args).catch(err => {
       if (err.status == 401) loginHelp.logout();
       return err;
@@ -25,29 +29,36 @@ export default class API {
   }
 
   listAll() {
-    return this.fetchAuth(NAVERS_INDEX);
+    return this.fetchAuth(API_URL + this.NAVERS_INDEX);
   }
 
   get(id) {
-    return this.fetchAuth(NAVERS_SHOW + id);
+    return this.fetchAuth(API_URL + this.NAVERS_SHOW + id);
   }
   create(naver) {
-    return this.fetchAuth(NAVERS_CREATE, {
+    return this.fetchAuth(API_URL + this.NAVERS_CREATE, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(naver)
     });
   }
   delete(id) {
-    return this.fetchAuth(NAVERS_DELETE + id, {
+    return this.fetchAuth(API_URL + this.NAVERS_DELETE + id, {
       method: "DELETE"
     });
   }
   update(naver) {
-    return this.fetchAuth(NAVERS_UPDATE + naver.id, {
+    return this.fetchAuth(API_URL + this.NAVERS_UPDATE + naver.id, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(naver)
+    });
+  }
+  login(email, password) {
+    return fetch(API_URL + this.USERS_LOGIN, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ email, password })
     });
   }
 }

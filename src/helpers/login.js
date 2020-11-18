@@ -1,4 +1,4 @@
-
+import API from "./api";
 export default class LoginHelper {
   getToken() {
     return localStorage.getItem("token");
@@ -11,14 +11,10 @@ export default class LoginHelper {
     return !!this.getToken();
   }
   login(email, password) {
+    let api = new API();
     return new Promise((res, rej) => {
-      fetch(API_URL + "/users/login", {
-        method: "post",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ email, password })
-      })
+      api
+        .login(email, password)
         .then(res => {
           if (res.status != 200) rej(res);
           return res.json();
@@ -29,8 +25,6 @@ export default class LoginHelper {
         });
     });
   }
-
- 
 
   logout() {
     this.setToken("");
